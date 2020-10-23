@@ -1,0 +1,1 @@
+export { UserUpdateComponent } from "./componentfile.jsx";
