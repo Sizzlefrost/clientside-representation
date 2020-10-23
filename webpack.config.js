@@ -9,8 +9,8 @@ module.exports = {
 		main: path.resolve(__dirname, "src", "index.jsx")
 	},
 	output: {
-		path: path.resolve("/Dev","clientside-representation","clientside-representation","dist"),
-		filename: 'bundle.js'
+		publicPath: "/",
+		filename: "./dist/bundle.js",
 	},
 	module: {
 		rules: [
