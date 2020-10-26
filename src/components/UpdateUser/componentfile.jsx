@@ -66,7 +66,33 @@ export class UserUpdateComponent extends Component {
 	}
 
 	deleteSend = () => {
-
+		const state = this.state
+		fetch(`http://localhost:3000/users/${parseInt(this.props.getId("http://localhost:8080/update/")) - 1}`, {
+			method: 'DELETE',
+			body: JSON.stringify({ 
+				"email": state.email, 
+				"firstName": state.firstName, 
+				"lastName": state.lastName, 
+				"password": state.password, 
+				"repassword": state.password2, 
+				"clientId": state.clientId,
+				"approved": state.approved }),
+			headers: {
+				'Content-type': 'application/json',
+			}
+		})
+		.then(() => { //reset form
+			alert(`${state.firstName} ${state.lastName}: user's profile deleted!`)
+			this.setState({
+				firstName: '',
+				lastName: '',
+				email: '',
+				password: '',
+				password2: '',
+				clientId: '',
+				approved: false,
+			});
+		});
 	}
 
 	handleInputChange = (event) => {
@@ -97,6 +123,7 @@ export class UserUpdateComponent extends Component {
 				<label htmlFor="clientId">Internal client ID:</label> <input type="text" name="clientId" placeholder="9001fake" disabled={true} value={state.clientId}/> <br />
 				<label htmlFor="approved">Approved:</label> <input type="checkbox" name="approved" value={state.approved} onChange={this.toggleCheckbox} checked={state.approved}/> <br />
 				<input type="button" value="Update" onClick={this.updateSend} disabled={!state.email.length}/> <br />
+				<input type="button" value="Delete" onClick={this.deleteSend}/> <br />
 			
 			<Link to="/">Main page</Link>
 		</div>
