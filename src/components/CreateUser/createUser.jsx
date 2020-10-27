@@ -12,6 +12,7 @@ export class UserCreationComponent extends Component {
 		password2: '',
 		clientId: '',
 		approved: false,
+		passwordFieldType: "password",
 	}
 
 	handleInputChange = (event) => {
@@ -23,10 +24,31 @@ export class UserCreationComponent extends Component {
 		});
 	}
 
+	handlePasswordToggle = (event) => {
+		const state = this.state
+		const checked = event.target.checked;
+
+		const btn = document.getElementById("password")
+		const btn2 = document.getElementById("password2")
+
+		if (checked == true) {
+			btn.type = "text";
+			btn2.type = "text";
+		} else {
+			btn.type = "password";
+			btn2.type = "password";
+		}
+	}
+
 	signUp = () => {
 		//future signup address: http://84.201.129.203:8888/api/users/sign_up
 		//future get cliend id address: http://84.201.129.203:8888/api/officers (returns 403 forbidden for now)
-		const state = this.state
+		const state = this.state;
+
+		if (state.password !== state.password2) {
+			alert("Passwords don't match! Please ensure you've entered them correctly, then try again.")
+			return
+		} else {
 		fetch('http://localhost:3000/users') //get list of users to generate a unique clientId
 			.then(response => response.json())
 			.then(users => state.clientId = users.length + 1)
@@ -54,7 +76,8 @@ export class UserCreationComponent extends Component {
 					clientId: '',
 					approved: false,
 				});
-			})
+			});
+		};
 	}
 
 	render() {
@@ -62,13 +85,15 @@ export class UserCreationComponent extends Component {
 
 		return <div className='createUserForm'>
 			<h1>Create a new collaborator account</h1>
-			
-			<input type="text" name="firstName" placeholder="First name" onChange={this.handleInputChange} value={state.firstName}/> <br />
-			<input type="text" name="lastName" placeholder="Last name" onChange={this.handleInputChange} value={state.lastName}/> <br />
-			<input type="text" name="email" placeholder="E-mail" onChange={this.handleInputChange} value={state.email}/> <br />
-			<input type="text" name="password" placeholder="Password" onChange={this.handleInputChange} value={state.password}/> <br />
-			<input type="text" name="password2" placeholder="Password again" onChange={this.handleInputChange} value={state.password2}/> <br />
-			<input type="button" value="Create" onClick={this.signUp} disabled={!state.email.length}/> <br />
+			<form>
+				<input type="text" name="firstName" placeholder="First name" onChange={this.handleInputChange} value={state.firstName}/> <br />
+				<input type="text" name="lastName" placeholder="Last name" onChange={this.handleInputChange} value={state.lastName}/> <br />
+				<input type="text" name="email" placeholder="E-mail" onChange={this.handleInputChange} value={state.email}/> <br />
+				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.handlePasswordToggle} value={true}/> <br />
+				<input type="password" name="password" id="password" placeholder="Password" onChange={this.handleInputChange} value={state.password}/> <br />
+				<input type="password" name="password2" id="password2" placeholder="Password again" onChange={this.handleInputChange} value={state.password2}/> <br />
+				<input type="button" value="Create" onClick={this.signUp} disabled={!state.email.length}/> <br />
+			</form>
 			<Link to="/">Main page</Link>
 		</div>
 	}
