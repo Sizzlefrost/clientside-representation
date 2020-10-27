@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-
 import { Link } from 'react-router-dom';
 
-//TODO: add styling
+import './createUser.css';
 
 export class UserCreationComponent extends Component {
 	state = {
@@ -61,7 +60,7 @@ export class UserCreationComponent extends Component {
 	render() {
 		const state = this.state;
 
-		return <div>
+		return <div className='createUserForm'>
 			<h1>Create a new collaborator account</h1>
 			
 			<input type="text" name="firstName" placeholder="First name" onChange={this.handleInputChange} value={state.firstName}/> <br />

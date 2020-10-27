@@ -1,1 +1,1 @@
-export { UserUpdateComponent } from "./componentfile.jsx";
+export { UserUpdateComponent } from "./editUpdateDeleteUser.jsx";
