@@ -5,9 +5,9 @@ import "./css/styles.css";
 
 import { BrowserRouter, Switch, Route, useRouteMatch } from 'react-router-dom';
 
-import { Component1 } from './components/Component1';
-import { UserCreationComponent } from './components/CreateUser';
-import { UserUpdateComponent } from './components/UpdateUser';
+import { UserListComponent } from './components/User/List';
+import { UserCreationComponent } from './components/User/Create';
+import { UserUpdateComponent } from './components/User/Update';
 
 //Bicycle Theft tracking app project: CRUD app - create/read/update/delete
 
@@ -20,7 +20,7 @@ export class App extends Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path="/" component={ Component1 }/>
+					<Route exact path="/" component={ UserListComponent }/>
 					<Route path="/create" component={ UserCreationComponent }/>			
 					<Route path="/update/:id" render={() => (<UserUpdateComponent getId={(urlBefore) => {
 						let url = document.URL;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
 
-export class Component1 extends Component {
+export class UserListComponent extends Component {
 	state = {
 		users: [],
 	}

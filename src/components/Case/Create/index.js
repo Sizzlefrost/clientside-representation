@@ -1,0 +1,1 @@
+export { JSComponentID } from "./component.jsx";
