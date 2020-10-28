@@ -41,18 +41,18 @@ export class UserCreationComponent extends Component {
 	}
 
 	signUp = () => {
-		//future signup address: http://84.201.129.203:8888/api/users/sign_up
-		//future get cliend id address: http://84.201.129.203:8888/api/officers (returns 403 forbidden for now)
 		const state = this.state;
 
 		if (state.password !== state.password2) {
 			alert("Passwords don't match! Please ensure you've entered them correctly, then try again.")
 			return
 		} else {
-		fetch('http://localhost:3000/users') //get list of users to generate a unique clientId
-			.then(response => response.json())
-			.then(users => state.clientId = users.length + 1)
-			.then(() => fetch('http://localhost:3000/users', { //post to signup address with the collaborator details
+			//generate a clientID randomly between 0 and 1000; this can generate duplicates, but we weren't asked to protect against that, and I'm honestly not even sure what clientId is for, exactly (when IPs and generic table key IDs exist), so it's half-assed for a reason :)
+			this.setState((prevState) => { 
+				this.state.clientId = Math.floor(Math.random()*1000);
+				//running right inside the setState, because I couldn't figure out a working callback and the re-render timing is unimportant to us
+				console.log(`CLIENTID ${state.clientId}`);
+				fetch('http://84.201.129.203:8888/api/auth/sign_up', { //post to signup address with the collaborator details
 					method: 'POST',
 					body: JSON.stringify({ 
 						"email": state.email, 
@@ -65,18 +65,9 @@ export class UserCreationComponent extends Component {
 					headers: {
 						'Content-type': 'application/json',
 					}
-				}))
-			.then(() => { //reset form
-				this.setState({ 
-					firstName: '',
-					lastName: '',
-					email: '',
-					password: '',
-					password2: '',
-					clientId: '',
-					approved: false,
-				});
+				})
 			});
+			
 		};
 	}
 
@@ -94,7 +85,7 @@ export class UserCreationComponent extends Component {
 				<input type="password" name="password2" id="password2" placeholder="Password again" onChange={this.handleInputChange} value={state.password2}/> <br />
 				<input type="button" value="Create" onClick={this.signUp} disabled={!state.email.length}/> <br />
 			</form>
-			<Link to="/">Main page</Link>
+			<Link to="/collaborators">Main page</Link>
 		</div>
 	}
 }

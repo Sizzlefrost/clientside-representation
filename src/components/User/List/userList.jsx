@@ -8,7 +8,9 @@ export class UserListComponent extends Component {
 	}
 
 	componentDidMount() {
-		fetch('http://localhost:3000/users')
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		console.log(`${localStorage.getItem("token")}`)
+		fetch('http://84.201.129.203:8888/api/officers', {headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 			.then(response => response.json())
 			.then(users => {
 				this.setState({users});
@@ -31,7 +33,7 @@ export class UserListComponent extends Component {
 			</tr>;
 
 		for (let i = 0; i <= users.length - 1; i++) {
-			let link = <Link to={"/update/".concat((i+1).toString())}>User page {i+1}</Link> 
+			let link = <Link to={"/updateUser/".concat((i+1).toString())}>User page {i+1}</Link> 
 
 			let approved = users[i].approved;
 			if (!approved) {approved = false};
@@ -62,8 +64,10 @@ export class UserListComponent extends Component {
 	}
 
 	approveUser(userID) {
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+
 		const userData = this.state.users[userID-1];
-		fetch(`http://localhost:3000/users/${userID}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${userID}`, {
 			method: "PUT",
 			body: JSON.stringify({ 
 				"email": userData.email, 
@@ -74,6 +78,7 @@ export class UserListComponent extends Component {
 				"clientId": userData.clientId, 
 				"approved": true}),
 			headers: {
+				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
 				'Content-type': 'application/json',
 			}
 		})
@@ -89,9 +94,10 @@ export class UserListComponent extends Component {
 	}
 
 	deleteUser(userID) {
-		console.log(`Deleting ${userID}`)
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+
 		const userData = this.state.users[userID-1];
-		fetch(`http://localhost:3000/users/${userID}`, {method: "DELETE"})
+		fetch(`http://84.201.129.203:8888/api/officers/${userID}`, {method: "DELETE", headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 		this.setState((prevState) => { delete this.state.users[userID-1]; this.render() })
 	}
 
@@ -105,7 +111,7 @@ export class UserListComponent extends Component {
 				</tbody>
 			</table>
 			<br/><br/><br/>
-			<Link to="/create">Create a new user</Link> 
+			<Link to="/createUser">Create a new user</Link> 
 		</div>
 	}
 }

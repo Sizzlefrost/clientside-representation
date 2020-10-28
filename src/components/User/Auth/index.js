@@ -1,1 +1,1 @@
-export { JSComponentID } from "./component.jsx";
+export { UserAuthorizationComponent } from "./AuthUser.jsx";

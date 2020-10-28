@@ -9,6 +9,26 @@
       "clientId": "",
       "approved": true,
       "id": 1
+    },
+    {
+      "email": "reddwhite@bluecorp.com",
+      "firstName": "Redd",
+      "lastName": "White",
+      "password": "green",
+      "repassword": "green",
+      "clientId": 2,
+      "approved": true,
+      "id": 2
+    },
+    {
+      "email": "testeraccount@mail.net",
+      "firstName": "Tester",
+      "lastName": "Account",
+      "password": "notaverysecurepassword",
+      "repassword": "notaverysecurepassword",
+      "clientId": 3,
+      "approved": false,
+      "id": 3
     }
   ]
 }

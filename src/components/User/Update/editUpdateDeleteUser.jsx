@@ -11,14 +11,17 @@ export class UserUpdateComponent extends Component {
 		password2: '',
 		clientId: '',
 		approved: false,
+
+		UID: parseInt(this.props.getId("http://localhost:8080/updateUser/")),
 	}
 
 	componentDidMount() {
-		//future fetch user by id address: http://84.201.129.203:8888/api/officers/:id | therefore function will test http://84.201.129.203:8888/api/officers/
-		fetch('http://localhost:3000/users')
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+
+		fetch('http://84.201.129.203:8888/api/officers/', {headers: {'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString())}})
 		.then(response => response.json())
 		.then(users => { 
-			let UID = parseInt(this.props.getId("http://localhost:8080/update/")) - 1;
+			let UID = this.state.UID - 1;
 			//TODO: replace the alert with a redirect to generic userlist
 			if (!users[UID]) { alert(`The userdata you are trying to access does not exist.`) } else 
 				this.setState({
@@ -35,10 +38,9 @@ export class UserUpdateComponent extends Component {
 	}
 
 	updateSend = () => {
-		//future signup address: http://84.201.129.203:8888/api/users/sign_up
-		//future get client id address: http://84.201.129.203:8888/api/officers (returns 403 forbidden for now)
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
 		const state = this.state
-		fetch(`http://localhost:3000/users/${parseInt(this.props.getId("http://localhost:8080/update/"))}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${this.state.UID}`, {
 			method: 'PUT',
 			body: JSON.stringify({ 
 				"email": state.email, 
@@ -49,6 +51,7 @@ export class UserUpdateComponent extends Component {
 				"clientId": state.clientId,
 				"approved": state.approved }),
 			headers: {
+				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
 				'Content-type': 'application/json',
 			}
 		})
@@ -58,8 +61,10 @@ export class UserUpdateComponent extends Component {
 	}
 
 	deleteSend = () => {
+		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+
 		const state = this.state
-		fetch(`http://localhost:3000/users/${parseInt(this.props.getId("http://localhost:8080/update/"))}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${this.state.UID}`, {
 			method: 'DELETE',
 			body: JSON.stringify({ 
 				"email": state.email, 
@@ -70,6 +75,7 @@ export class UserUpdateComponent extends Component {
 				"clientId": state.clientId,
 				"approved": state.approved }),
 			headers: {
+				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
 				'Content-type': 'application/json',
 			}
 		})
@@ -128,7 +134,7 @@ export class UserUpdateComponent extends Component {
 				<input type="button" value="Update" onClick={this.updateSend} disabled={!state.email.length}/> <br />
 				<input type="button" value="Delete" onClick={this.deleteSend}/> <br />
 			
-			<Link to="/">Main page</Link>
+			<Link to="/collaborators">Main page</Link>
 		</div>
 	}
 }
