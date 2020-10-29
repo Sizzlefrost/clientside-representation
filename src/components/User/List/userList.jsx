@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 export class UserListComponent extends Component {
 	state = {
 		users: [],
+
+		authFlag: false,
 	}
 
 	componentDidMount() {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
-		console.log(`${localStorage.getItem("token")}`)
+		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authFlag=true}); this.render();return}; //redirect to main
+		console.log(localStorage.getItem("token"));
 		fetch('http://84.201.129.203:8888/api/officers', {headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 			.then(response => response.json())
 			.then(users => {
 				this.setState({users});
 			});
-	}
-
-	getID() {
-		return this.state.id
 	}
 
 	formatTableRows(users) { //takes the users JS table and returns it formatted into HTML tags needed to construct an HTML table
@@ -33,6 +31,9 @@ export class UserListComponent extends Component {
 			</tr>;
 
 		for (let i = 0; i <= users.length - 1; i++) {
+			//inside this cycle, an entry for a user is made to be placed into the table
+			//it needs three interactive objects: a link to the user's page, an approval button and a deletion button
+			//we store them in variables, and buttons are hooked to executive functions
 			let link = <Link to={"/updateUser/".concat((i+1).toString())}>User page {i+1}</Link> 
 
 			let approved = users[i].approved;
@@ -64,10 +65,10 @@ export class UserListComponent extends Component {
 	}
 
 	approveUser(userID) {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authFlag=true})}; //redirect to main
 
 		const userData = this.state.users[userID-1];
-		fetch(`http://84.201.129.203:8888/api/officers/${userID}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${userData._id}`, {
 			method: "PUT",
 			body: JSON.stringify({ 
 				"email": userData.email, 
@@ -94,16 +95,26 @@ export class UserListComponent extends Component {
 	}
 
 	deleteUser(userID) {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authFlag=true})}; //redirect to main
 
 		const userData = this.state.users[userID-1];
-		fetch(`http://84.201.129.203:8888/api/officers/${userID}`, {method: "DELETE", headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
+		fetch(`http://84.201.129.203:8888/api/officers/${userData._id}`, {method: "DELETE", headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 		this.setState((prevState) => { delete this.state.users[userID-1]; this.render() })
+	}
+
+	signOut(self) {
+		localStorage.removeItem('token');
+		self.state.authFlag = true;
+		self.forceUpdate();
 	}
 
 	render() {
 		const { users } = this.state;
 
+		let link = (this.state.authFlag && <Redirect to="/auth"/>) || (<Link to="/createUser">Create a new user</Link>);
+		let self = this;
+		
+		console.log(this.state.authFlag, link.type.displayName || link.type);
 		return <div>
 			<table>
 				<tbody>
@@ -111,7 +122,9 @@ export class UserListComponent extends Component {
 				</tbody>
 			</table>
 			<br/><br/><br/>
-			<Link to="/createUser">Create a new user</Link> 
+			{link}
+
+			<button onClick={function() {return self.signOut(self)}}>Sign out</button>
 		</div>
 	}
 }

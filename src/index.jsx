@@ -28,7 +28,8 @@ export class App extends Component {
 		return (
 			<div>
 				<Switch>
-					<Route exact path="/" component={ UserAuthorizationComponent }/>
+					<Redirect exact from="/" to="/auth"/>
+					<Route path="/auth" component={UserAuthorizationComponent}/>
 					<Route path="/collaborators" component={ UserListComponent }/>
 					<Route path="/createUser" component={ UserCreationComponent }/>			
 					<Route path="/updateUser/:id" render={() => (<UserUpdateComponent getId={passedIdPuller} />)}/>

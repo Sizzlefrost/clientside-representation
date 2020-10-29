@@ -8,15 +8,15 @@ export class UserUpdateComponent extends Component {
 		lastName: '',
 		email: '',
 		password: '',
-		password2: '',
 		clientId: '',
 		approved: false,
 
-		UID: parseInt(this.props.getId("http://localhost:8080/updateUser/")),
+		UID: parseInt(this.props.getId("http://localhost:8080/updateUser/")), //clientside user ID, calculated from page URL, which is generated off the userlist
+		SUID: '', //serverside user ID, assigned by the server and involves a long string rather than a simple number
 	}
 
 	componentDidMount() {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		if (!localStorage.getItem("token")) {return}; //unauthorized; redirect to sign-in
 
 		fetch('http://84.201.129.203:8888/api/officers/', {headers: {'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString())}})
 		.then(response => response.json())
@@ -28,19 +28,18 @@ export class UserUpdateComponent extends Component {
 					email: users[UID].email,
 					firstName: users[UID].firstName,
 					lastName: users[UID].lastName,
-					password: users[UID].password,
-					password2: users[UID].password,
+					password: users[UID].password, //returns hashed, I'll keep requesting it as a temp option.
 					clientId: users[UID].clientId,
 					approved: users[UID].approved,
-				
+					SUID: users[UID]._id, //fetch the serverside user ID, to include in further requests
 			})
 		});
 	}
 
 	updateSend = () => {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		if (!localStorage.getItem("token")) {return}; //unauthorized; redirect to sign-in
 		const state = this.state
-		fetch(`http://84.201.129.203:8888/api/officers/${this.state.UID}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${this.state.SUID}`, {
 			method: 'PUT',
 			body: JSON.stringify({ 
 				"email": state.email, 
@@ -61,35 +60,18 @@ export class UserUpdateComponent extends Component {
 	}
 
 	deleteSend = () => {
-		if (!localStorage.getItem("token")) {return}; //throw an error: unauthorized
+		if (!localStorage.getItem("token")) {return}; //unauthorized; redirect to sign-in
 
 		const state = this.state
-		fetch(`http://84.201.129.203:8888/api/officers/${this.state.UID}`, {
+		fetch(`http://84.201.129.203:8888/api/officers/${this.state.SUID}`, {
 			method: 'DELETE',
-			body: JSON.stringify({ 
-				"email": state.email, 
-				"firstName": state.firstName, 
-				"lastName": state.lastName, 
-				"password": state.password, 
-				"repassword": state.password2, 
-				"clientId": state.clientId,
-				"approved": state.approved }),
 			headers: {
 				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
 				'Content-type': 'application/json',
 			}
 		})
 		.then(() => { //reset form
-			alert(`${state.firstName} ${state.lastName}: user's profile deleted!`)
-			this.setState({
-				firstName: '',
-				lastName: '',
-				email: '',
-				password: '',
-				password2: '',
-				clientId: '',
-				approved: false,
-			});
+			alert(`${state.firstName} ${state.lastName}: user's profile deleted!`) //redirect
 		});
 	}
 
@@ -108,7 +90,7 @@ export class UserUpdateComponent extends Component {
 
 		if (name == "approved") {
 			this.setState((prevState) => {
-				this.state.approved = !this.state.approved;
+				this.state.approved = checked;
 			});
 		};
 
@@ -128,8 +110,9 @@ export class UserUpdateComponent extends Component {
 				<label htmlFor="lastName">Last name:</label> <input type="text" name="lastName" placeholder="Bloodwell" onChange={this.handleInputChange} value={state.lastName}/> <br />
 				<label htmlFor="email">E-mail:</label> <input type="text" name="email" placeholder="ab@c.net" onChange={this.handleInputChange} value={state.email}/> <br />
 				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
-				<label htmlFor="password">Password:</label> <input type="password" id="password" name="password" placeholder="supersecret123" onChange={this.handleInputChange} value={state.password}/> <br />
+				<label htmlFor="password">Hashed password:</label> <input type="password" id="password" name="password" placeholder="supersecret123" disabled={true} onChange={this.handleInputChange} value={state.password}/> <br />
 				<label htmlFor="clientId">Internal client ID:</label> <input type="text" name="clientId" placeholder="9001fake" disabled={true} value={state.clientId}/> <br />
+				<label htmlFor="serverId">Internal serverside UID:</label> <input type="text" name="serverId" placeholder="9001fake" disabled={true} value={state.SUID}/> <br />
 				<label htmlFor="approved">Approved:</label> <input type="checkbox" id="approved" name="approved" value={state.approved} onChange={this.toggleCheckbox}/> <br />
 				<input type="button" value="Update" onClick={this.updateSend} disabled={!state.email.length}/> <br />
 				<input type="button" value="Delete" onClick={this.deleteSend}/> <br />
