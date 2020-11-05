@@ -55,7 +55,7 @@ export class UserAuthorizationComponent extends Component {
 			return <div>
 				<h1>Sign in</h1>
 			
-				<input type="text" name="email" placeholder="e-mail" onChange={this.handleInputChange} value={state.email}/> <br />
+				<input type="email" name="email" placeholder="e-mail" onChange={this.handleInputChange} value={state.email}/> <br />
 				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
 				<input type="password" id="password" name="password" placeholder="password" onChange={this.handleInputChange} value={state.password}/> <br />
 				

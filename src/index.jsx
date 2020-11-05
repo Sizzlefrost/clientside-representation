@@ -4,6 +4,8 @@ import ReactDom from 'react-dom';
 import "./css/styles.css";
 
 import { BrowserRouter, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+ 
+import { CaseCreationComponent } from './components/Case/Create';
 
 import { UserListComponent } from './components/User/List';
 import { UserCreationComponent } from './components/User/Create';
@@ -29,6 +31,7 @@ export class App extends Component {
 			<div>
 				<Switch>
 					<Redirect exact from="/" to="/auth"/>
+					<Route path="/cases" component={ CaseCreationComponent } />
 					<Route path="/auth" component={UserAuthorizationComponent}/>
 					<Route path="/collaborators" component={ UserListComponent }/>
 					<Route path="/createUser" component={ UserCreationComponent }/>			

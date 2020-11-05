@@ -1,1 +1,1 @@
-export { JSComponentID } from "./component.jsx";
+export { CaseCreationComponent } from "./Create.jsx";

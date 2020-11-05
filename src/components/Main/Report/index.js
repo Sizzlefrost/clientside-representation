@@ -1,1 +1,1 @@
-export { JSComponentID } from "./component.jsx";
+export { ReportCaseComponent } from "./Report.jsx";

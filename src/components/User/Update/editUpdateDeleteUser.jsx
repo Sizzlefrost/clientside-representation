@@ -8,7 +8,7 @@ export class UserUpdateComponent extends Component {
 		lastName: '',
 		email: '',
 		password: '',
-		clientId: '',
+		clientId: 'Sizzlefrost',
 		approved: false,
 
 		UID: parseInt(this.props.getId("http://localhost:8080/updateUser/")), //clientside user ID, calculated from page URL, which is generated off the userlist
@@ -108,7 +108,7 @@ export class UserUpdateComponent extends Component {
 			
 				<label htmlFor="firstName">First name:</label> <input type="text" name="firstName" placeholder="Alex" onChange={this.handleInputChange} value={state.firstName}/> <br />
 				<label htmlFor="lastName">Last name:</label> <input type="text" name="lastName" placeholder="Bloodwell" onChange={this.handleInputChange} value={state.lastName}/> <br />
-				<label htmlFor="email">E-mail:</label> <input type="text" name="email" placeholder="ab@c.net" onChange={this.handleInputChange} value={state.email}/> <br />
+				<label htmlFor="email">E-mail:</label> <input type="email" name="email" placeholder="ab@c.net" onChange={this.handleInputChange} value={state.email}/> <br />
 				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
 				<label htmlFor="password">Hashed password:</label> <input type="password" id="password" name="password" placeholder="supersecret123" disabled={true} onChange={this.handleInputChange} value={state.password}/> <br />
 				<label htmlFor="clientId">Internal client ID:</label> <input type="text" name="clientId" placeholder="9001fake" disabled={true} value={state.clientId}/> <br />
