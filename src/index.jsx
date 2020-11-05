@@ -4,6 +4,8 @@ import ReactDom from 'react-dom';
 import "./css/styles.css";
 
 import { BrowserRouter, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+
+import { NavBarComponent } from './components/Main/Navbar';
  
 import { CaseCreationComponent } from './components/Case/Create';
 
@@ -29,6 +31,7 @@ export class App extends Component {
 
 		return (
 			<div>
+				<NavBarComponent />
 				<Switch>
 					<Redirect exact from="/" to="/auth"/>
 					<Route path="/cases" component={ CaseCreationComponent } />

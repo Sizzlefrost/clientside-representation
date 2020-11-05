@@ -53,7 +53,7 @@ export class UserAuthorizationComponent extends Component {
 
 		if (state.redirect === false) {
 			return <div>
-				<h1>Sign in</h1>
+				<h2>Sign in</h2>
 			
 				<input type="email" name="email" placeholder="e-mail" onChange={this.handleInputChange} value={state.email}/> <br />
 				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />

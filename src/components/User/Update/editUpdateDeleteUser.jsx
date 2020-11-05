@@ -104,7 +104,7 @@ export class UserUpdateComponent extends Component {
 		const state = this.state;
 
 		return <div>
-			<h1>Collaborator page: {state.firstName} {state.lastName}</h1>
+			<h2>Collaborator page: {state.firstName} {state.lastName}</h2>
 			
 				<label htmlFor="firstName">First name:</label> <input type="text" name="firstName" placeholder="Alex" onChange={this.handleInputChange} value={state.firstName}/> <br />
 				<label htmlFor="lastName">Last name:</label> <input type="text" name="lastName" placeholder="Bloodwell" onChange={this.handleInputChange} value={state.lastName}/> <br />

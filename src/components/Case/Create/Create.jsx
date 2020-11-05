@@ -81,7 +81,7 @@ export class CaseCreationComponent extends Component {
 		const state = this.state;
 
 		return <div>
-			<h1>Create a new case</h1>
+			<h2>Create a new case</h2>
 			<form>
 				<input type="text" name="status" placeholder="Case status" onChange={this.handleInputChange} value={state.status}/> <br />
 				<input type="text" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} disabled={true}/> <br />
