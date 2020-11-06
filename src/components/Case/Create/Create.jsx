@@ -18,8 +18,8 @@ export class CaseCreationComponent extends Component {
 	state = {
 		status: 'new', 						//mandatory; new || in_progress || done
 		date: this.getCurrentDate(),		//optional; date of report creation
-		licenseNumber: '',					//mandatory
-		color: '',							//mandatory
+		licenseNumber: '-840',				//mandatory
+		color: 'Unknown',					//mandatory
 		type: '',							//optional; (null) || sport || general
 		ownerFullName: '',					//mandatory
 		officer: '',						//optional; ID of the officer-handler for the case, taken from the database
@@ -28,6 +28,12 @@ export class CaseCreationComponent extends Component {
 		clientId: 'Sizzlefrost',			//mandatory; newfound info is that this is apparently ID for the project, not rly a part of the project itself
 		description: '',					//optional
 		resolution: '',						//optional; mandatory for closed cases (status: done)
+
+		authorized: false,
+	}
+
+	componentDidMount() {
+		if (localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authorized=true})}; //check auth
 	}
 
 	handleInputChange = (event) => {
@@ -52,29 +58,45 @@ export class CaseCreationComponent extends Component {
 	signUp = () => {
 		const state = this.state;
 
-		//check authorization
-		if (!localStorage.getItem("token")) { return }; //TODO
-		
-		fetch('http://84.201.129.203:8888/api/cases', { //post a new case
-			method: 'POST',
-			body: JSON.stringify({ 
-				"status": state.status, 
-				"date": state.date,	
-				"licenseNumber": state.licenseNumber,	
-				"color": state.color,	
-				"type": state.type,
-				"ownerFullName": state.ownerFullName,
-				"officer": state.officer,
-				"createdAt": state.createdAt,
-				"updateAt": state.updateAt,
-				"clientId": state.clientId,
-				"description": state.description,
-				"resolution": state.resolution,}),
-			headers: {
-				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
-				'Content-type': 'application/json',
-			}
-		});		
+		if (state.authorized === true) { //used on the authorized case creation page
+			fetch('http://84.201.129.203:8888/api/cases', { //post a new case
+				method: 'POST',
+				body: JSON.stringify({ 
+					"status": state.status, 
+					"date": state.date,	
+					"licenseNumber": state.licenseNumber,	
+					"color": state.color,	
+					"type": state.type,
+					"ownerFullName": state.ownerFullName,
+					"createdAt": state.createdAt,
+					"updateAt": state.updateAt,
+					"clientId": state.clientId,
+					"description": state.description,
+					"resolution": state.resolution,}),
+				headers: {
+					'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
+					'Content-type': 'application/json',
+				}
+			});
+		} else { //used on the unauthorized report creation page		
+			fetch('http://84.201.129.203:8888/api/public/report', { //post a new case
+				method: 'POST',
+				body: JSON.stringify({ 
+					"status": state.status, 
+					"date": state.date,	
+					"licenseNumber": state.licenseNumber,	
+					"color": state.color,	
+					"type": state.type,
+					"ownerFullName": state.ownerFullName,
+					"createdAt": state.createdAt,
+					"updateAt": state.updateAt,
+					"clientId": state.clientId,
+					"description": state.description,}),
+				headers: {
+					'Content-type': 'application/json',
+				}
+			});
+		}		
 	}
 
 	render() {
@@ -108,7 +130,7 @@ export class CaseCreationComponent extends Component {
 				<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />				
 				<input type="text" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} disabled={true}/> <br />
 				<input type="text" name="updateAt" placeholder="Date of latest update" onChange={this.handleInputChange} value={state.updateAt} disabled={true}/> <br />
-				<input type="number" name="clientId" placeholder="Client ID" onChange={this.handleInputChange} value={state.clientId} disabled={true}/> <br />
+				<input type="text" name="clientId" placeholder="Client ID" onChange={this.handleInputChange} value={state.clientId} disabled={true}/> <br />
 				<input type="text" name="description" placeholder="Case description" onChange={this.handleInputChange} value={state.description}/> <br />
 				<input type="text" name="resolution" placeholder="Case resolution summary" onChange={this.handleInputChange} value={state.resolution}/> <br />
 				<input type="button" value="Create" onClick={this.signUp}/> <br />

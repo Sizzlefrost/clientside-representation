@@ -6,13 +6,17 @@ import "./css/styles.css";
 import { BrowserRouter, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
 import { NavBarComponent } from './components/Main/Navbar';
+//import { FrontPageComponent } from './components/Main/Frontpage';
+//import { ReportCaseComponent } from './components/Main/Report';
  
 import { CaseCreationComponent } from './components/Case/Create';
+//import { CaseUpdateComponent } from './components/Case/Update';
+//import { CaseListComponent } from './components/Case/List';
 
-import { UserListComponent } from './components/User/List';
 import { UserCreationComponent } from './components/User/Create';
-import { UserUpdateComponent } from './components/User/Update';
 import { UserAuthorizationComponent } from './components/User/Auth';
+import { UserUpdateComponent } from './components/User/Update';
+import { UserListComponent } from './components/User/List';
 
 //Bicycle Theft tracking app project: CRUD app - create/read/update/delete
 
@@ -26,8 +30,6 @@ export class App extends Component {
 			let url = document.URL;
 			return url.substring(urlBefore.length)
 		}
-
-						
 
 		return (
 			<div>

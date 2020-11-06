@@ -1,1 +1,1 @@
-export { JSComponentID } from "./component.jsx";
+export { CaseUpdateComponent } from "./Update.jsx";
