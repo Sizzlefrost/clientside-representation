@@ -7,11 +7,10 @@ import { BrowserRouter, Switch, Route, useRouteMatch, Redirect } from 'react-rou
 
 import { NavBarComponent } from './components/Main/Navbar';
 //import { FrontPageComponent } from './components/Main/Frontpage';
-//import { ReportCaseComponent } from './components/Main/Report';
  
 import { CaseCreationComponent } from './components/Case/Create';
 //import { CaseUpdateComponent } from './components/Case/Update';
-//import { CaseListComponent } from './components/Case/List';
+import { CaseListComponent } from './components/Case/List';
 
 import { UserCreationComponent } from './components/User/Create';
 import { UserAuthorizationComponent } from './components/User/Auth';
@@ -36,8 +35,10 @@ export class App extends Component {
 				<NavBarComponent />
 				<Switch>
 					<Redirect exact from="/" to="/auth"/>
-					<Route path="/cases" component={ CaseCreationComponent } />
-					<Route path="/auth" component={UserAuthorizationComponent}/>
+					<Route path="/report" component={ CaseCreationComponent } />
+					<Route path="/createCase" component={ CaseCreationComponent } />
+					<Route path="/cases" component={ CaseListComponent } />
+					<Route path="/auth" component={ UserAuthorizationComponent }/>
 					<Route path="/collaborators" component={ UserListComponent }/>
 					<Route path="/createUser" component={ UserCreationComponent }/>			
 					<Route path="/updateUser/:id" render={() => (<UserUpdateComponent getId={passedIdPuller} />)}/>

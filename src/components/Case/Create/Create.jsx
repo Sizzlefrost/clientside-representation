@@ -66,7 +66,7 @@ export class CaseCreationComponent extends Component {
 					"date": state.date,	
 					"licenseNumber": state.licenseNumber,	
 					"color": state.color,	
-					"type": state.type,
+					"type": state.type || "general",
 					"ownerFullName": state.ownerFullName,
 					"createdAt": state.createdAt,
 					"updateAt": state.updateAt,
