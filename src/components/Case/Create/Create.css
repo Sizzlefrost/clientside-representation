@@ -46,3 +46,8 @@
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
+
+/* Ensure that our ugly input fields are not displayed */
+.dropdown input {
+  display: none;
+}

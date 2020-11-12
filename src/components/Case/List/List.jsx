@@ -6,26 +6,55 @@ export class CaseListComponent extends Component {
 	state = {
 		cases: [],
 
+		caseTracker: 0,
+
 		authFlag: false,
 	}
 
 	componentDidMount() {
-		console.log(localStorage.getItem("token"));
+		//console.log(localStorage.getItem("token"));
 		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authFlag=true}); this.render();return}; //redirect to main
 		fetch('http://84.201.129.203:8888/api/cases', {headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 			.then(response => response.json())
 			.then(cases => {
 				this.setState({cases});
-			});
+			})
+			.then(()=>{return});
 	}
 
-	changeStatus(element, targetStatus) {
-		this.setState((prevState) => {this.state.cases[element].status = targetStatus});
+	handleRadioSelect = (event) => {
+		const name = event.target.name;
+		const value = event.target.value;
+		const eid = this.state.caseTracker;
 
-		setTimeout( () => { //asyncronous to make sure the setState goes through first
-			console.log(this.state.cases[element].status);
-			this.render();
-		}, 200);
+		const caseData = this.state.cases[eid];
+		fetch(`http://84.201.129.203:8888/api/cases/${caseData._id}`, {
+			method: 'PUT',
+			body: JSON.stringify({ 
+				"status": caseData.status,
+				"date": caseData.date,
+				"licenseNumber": caseData.licenseNumber,
+				"color": caseData.color,
+				"type": caseData.type,
+				"ownerFullName": caseData.ownerFullName,
+				"officer": caseData.officer,
+				"createdAt": caseData.createdAt,
+				"updateAt": caseData.updateAt,
+				"clientId": caseData.clientId,
+				"description": caseData.description,
+				"resolution": caseData.resolution, 
+			}),
+			headers: {
+				'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
+				'Content-type': 'application/json',
+			}
+		})
+		.then(()=>{
+			this.setState((prevState) => { 
+				this.state.cases[eid].[name] = value;
+				this.forceUpdate();
+			});
+		});
 	}
 
 	convertStatus(techStatus) {
@@ -37,9 +66,9 @@ export class CaseListComponent extends Component {
 	}
 
 	formatTableRows(cases) {
-		if (!cases) { cases = this.state.cases};
+		const self = this;
+		const state = self.state;
 		let result = [];
-		let self = this;
 
 		result[0] = <tr key="0">
 			<th>Status</th>
@@ -54,27 +83,27 @@ export class CaseListComponent extends Component {
 			<th> </th>
 		</tr>;
 
-		let status = <div className="dropdown">
-					<button className="dropbtn"> New </button>
-					<div className="dropdown-content">
-						<button className="dropdown-single" > New </button>
-						<button className="dropdown-single" > In progress </button>
-						<button className="dropdown-single" > Concluded </button>
-					</div>
-				</div>;
-
 		for (let i = 0; i <= cases.length - 1; i++) {
-			console.log(self.convertStatus(this.state.cases[i].status));
-			status = <div className="dropdown">
-					<button className="dropbtn"> {self.convertStatus(this.state.cases[i].status)} </button>
-					<div className="dropdown-content">
-						<button className="dropdown-single" onClick={function() {self.changeStatus(i, "new")}}> New </button>
-						<button className="dropdown-single" onClick={function() {self.changeStatus(i, "in_progress")}}> In progress </button>
-						<button className="dropdown-single" onClick={function() {self.changeStatus(i, "done")}}> Concluded </button>
-					</div>
-				</div>;
+			state.caseTracker = i;
+			if (!cases[i]) {return};
 
-			console.log(status);
+			let status = <div className="dropdown">
+					<button className="dropbtn"> {self.convertStatus(state.cases[i].status)} </button>
+					<form className="dropdown-content">
+						<div className="dropdown-single">
+							<label htmlFor={"new".concat(i.toString())}>New</label>
+							<input type="radio" name="status" id={"new".concat(i.toString())} value="new" onChange={self.handleRadioSelect} />
+						</div>
+						<div className="dropdown-single">
+							<label htmlFor={"in_progress".concat(i.toString())}>In progress</label>
+							<input type="radio" name="status" id={"in_progress".concat(i.toString())} value="in_progress" onChange={self.handleRadioSelect} />
+						</div>
+						<div className="dropdown-single">
+							<label htmlFor={"done".concat(i.toString())}>Concluded</label>
+							<input type="radio" name="status" id={"done".concat(i.toString())} value="done" onChange={self.handleRadioSelect} />
+						</div>
+					</form>
+				</div>;
 
 			let link = <Link to={"/updateCase/".concat((i+1).toString())}>Case page {i+1}</Link>;
 
@@ -86,7 +115,7 @@ export class CaseListComponent extends Component {
 				<td>{cases[i].color}</td>
 				<td>{cases[i].type}</td>
 				<td>{cases[i].ownerFullName}</td>
-				<td>{cases[i].officer}</td>
+				<td>{cases[i].officer || "-"}</td>
 				<td>{cases[i].createdAt}</td>
 				<td>{cases[i].updateAt}</td>
 				<td>{link}</td>
@@ -102,7 +131,12 @@ export class CaseListComponent extends Component {
 
 		const caseData = this.state.cases[caseID-1];
 		fetch(`http://84.201.129.203:8888/api/cases/${caseData._id}`, {method: "DELETE", headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
-		this.setState((prevState) => { delete this.state.cases[caseID-1]; this.render() })
+		this.setState((prevState) => { 
+			delete this.state.cases[caseID-1];
+			setTimeout( () => { //asyncronous to make sure the setState goes through first
+				this.forceUpdate();
+			}, 200); 
+		})
 	}
 
 	signOut(self) {
@@ -112,16 +146,17 @@ export class CaseListComponent extends Component {
 	}
 
 	render() {
-		const { users } = this.state;
+		const { cases } = this.state;
 
 		let link = (this.state.authFlag && <Redirect to="/auth"/>) || (<Link to="/createCase">Create a new case</Link>);
 		let self = this;
-		
-		//console.log(this.state.authFlag, link.type.displayName || link.type);
+
+		let table = this.formatTableRows(cases)
+
 		return <div>
 			<table>
 				<tbody>
-					{this.formatTableRows(users)}
+					{table}
 				</tbody>
 			</table>
 			<br/><br/><br/>

@@ -9,7 +9,7 @@ import { NavBarComponent } from './components/Main/Navbar';
 //import { FrontPageComponent } from './components/Main/Frontpage';
  
 import { CaseCreationComponent } from './components/Case/Create';
-//import { CaseUpdateComponent } from './components/Case/Update';
+import { CaseUpdateComponent } from './components/Case/Update';
 import { CaseListComponent } from './components/Case/List';
 
 import { UserCreationComponent } from './components/User/Create';
@@ -37,6 +37,7 @@ export class App extends Component {
 					<Redirect exact from="/" to="/auth"/>
 					<Route path="/report" component={ CaseCreationComponent } />
 					<Route path="/createCase" component={ CaseCreationComponent } />
+					<Route path="/updateCase/:id" render={() => (<CaseUpdateComponent getId={passedIdPuller} />)}/>
 					<Route path="/cases" component={ CaseListComponent } />
 					<Route path="/auth" component={ UserAuthorizationComponent }/>
 					<Route path="/collaborators" component={ UserListComponent }/>

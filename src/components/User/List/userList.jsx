@@ -102,12 +102,6 @@ export class UserListComponent extends Component {
 		this.setState((prevState) => { delete this.state.users[userID-1]; this.render() })
 	}
 
-	signOut(self) {
-		localStorage.removeItem('token');
-		self.state.authFlag = true;
-		self.forceUpdate();
-	}
-
 	render() {
 		const { users } = this.state;
 
@@ -123,8 +117,6 @@ export class UserListComponent extends Component {
 			</table>
 			<br/><br/><br/>
 			{link}
-
-			<button onClick={function() {return self.signOut(self)}}>Sign out</button>
 		</div>
 	}
 }

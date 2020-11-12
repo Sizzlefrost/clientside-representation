@@ -11,8 +11,7 @@ export class CaseCreationComponent extends Component {
 		if (cmonth < 10) { cmonth = "0".concat(cmonth) };
 		let cday = cdate.getDate().toString();
 		if (cday < 10) { cday = "0".concat(cday) };
-		cdate = cyear.concat(".".concat(cmonth.concat(".".concat(cday))));
-		return cdate
+		return cdate, cyear.concat(".".concat(cmonth.concat(".".concat(cday))))
 	}
 
 	state = {
@@ -20,7 +19,7 @@ export class CaseCreationComponent extends Component {
 		date: this.getCurrentDate(),		//optional; date of report creation
 		licenseNumber: '-840',				//mandatory
 		color: 'Unknown',					//mandatory
-		type: '',							//optional; (null) || sport || general
+		type: 'general',					//optional; sport || general
 		ownerFullName: '',					//mandatory
 		officer: '',						//optional; ID of the officer-handler for the case, taken from the database
 		createdAt: this.getCurrentDate(),	//mandatory; date of case creation
@@ -29,11 +28,11 @@ export class CaseCreationComponent extends Component {
 		description: '',					//optional
 		resolution: '',						//optional; mandatory for closed cases (status: done)
 
-		authorized: false,
+		authorized: true,
 	}
 
 	componentDidMount() {
-		if (localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authorized=true})}; //check auth
+		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authorized=false})}; //check auth
 	}
 
 	handleInputChange = (event) => {
@@ -47,12 +46,28 @@ export class CaseCreationComponent extends Component {
 
 	handleRadioSelect = (event) => {
 		const name = event.target.name;
+		const value = event.target.value;
 
-		if (name === "type_ " || name === "type_sport" || name === "type_general") {
-			this.setState({ 
-				type: name.substring(name.indexOf("type_") + "type".length)	
-			});
-		}		
+		this.setState({ 
+			[name]: value
+		});
+	}
+
+	interpretValues(techValue) {
+		switch (techValue) {
+			case ("new"):
+				return "New";
+			case ("in_progress"):
+				return "In progress";
+			case ("done"):
+				return "Concluded";
+			case ("general"):
+				return "General";
+			case ("sport"):
+				return "Sport";
+			default:
+				return "Error";
+		}
 	}
 
 	signUp = () => {
@@ -105,37 +120,68 @@ export class CaseCreationComponent extends Component {
 		return <div>
 			<h2>Create a new case</h2>
 			<form>
-				<input type="text" name="status" placeholder="Case status" onChange={this.handleInputChange} value={state.status}/> <br />
-				<input type="text" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} disabled={true}/> <br />
-				<input type="number" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
-				<input type="text" name="color" placeholder="Colour" onChange={this.handleInputChange} value={state.color}/> <br />
+				<label htmlFor="status"> Case status: </label>
 				<div className="dropdown">
-					<button className="dropbtn" value={state.type}/>
+					<button className="dropbtn">{this.interpretValues(state.status)}</button>
+					<form className="dropdown-content">
+					<div className="dropdown-single">
+						<label htmlFor="new">{this.interpretValues("new")}</label>
+						<input type="radio" name="status" id="new" value="new" onChange={this.handleRadioSelect}/>
+					</div>
+					<div className="dropdown-single">
+						<label htmlFor="in_progress">{this.interpretValues("in_progress")}</label>
+						<input type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleRadioSelect}/>
+					</div>
+					<div className="dropdown-single">
+						<label htmlFor="done">{this.interpretValues("done")}</label>
+						<input type="radio" name="status" id="done" value="done" onChange={this.handleRadioSelect}/>
+					</div>
+					</form>
+				</div> <br />
+
+				<label htmlFor="date"> Date of report: </label>
+				<input type="text" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} disabled={true}/> <br />
+
+				<label htmlFor="licenseNumber"> Bike license number: </label>
+				<input type="number" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
+
+				<label htmlFor="status"> Bike colour: </label>
+				<input type="text" name="color" placeholder="Colour" onChange={this.handleInputChange} value={state.color}/> <br />
+
+				<label htmlFor="type"> Bike type: </label>
+				<div className="dropdown">
+					<button className="dropbtn"> {this.interpretValues(state.type)} </button>
 					<form className="dropdown-content">
 						<div className="dropdown-single">
-							<label htmlFor="type_"> </label>
-							<input type="radio" name="type_ " value="" onChange={this.handleRadioSelect}/>
+							<label htmlFor="sport">{this.interpretValues("sport")}</label>
+							<input type="radio" name="type" id="sport" value="sport" onChange={this.handleRadioSelect}/>
 						</div>
 						<div className="dropdown-single">
-							<label htmlFor="type_sport">Sport</label>
-							<input type="radio" name="type_sport" value="sport" onChange={this.handleRadioSelect}/>
-						</div>
-						<div className="dropdown-single">
-							<label htmlFor="type_sport">General</label>
-							<input type="radio" name="type_general" value="general" onChange={this.handleRadioSelect}/>
+							<label htmlFor="general">{this.interpretValues("general")}</label>
+							<input type="radio" name="type" id="general" value="general" onChange={this.handleRadioSelect}/>
 						</div>
 					</form>
 				</div> <br />
+
+				<label htmlFor="status"> Full name of bike user: </label>
 				<input type="text" name="ownerFullName" placeholder="Full name of bike owner" onChange={this.handleInputChange} value={state.ownerFullName}/> <br />
-				<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />				
-				<input type="text" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} disabled={true}/> <br />
-				<input type="text" name="updateAt" placeholder="Date of latest update" onChange={this.handleInputChange} value={state.updateAt} disabled={true}/> <br />
-				<input type="text" name="clientId" placeholder="Client ID" onChange={this.handleInputChange} value={state.clientId} disabled={true}/> <br />
-				<input type="text" name="description" placeholder="Case description" onChange={this.handleInputChange} value={state.description}/> <br />
-				<input type="text" name="resolution" placeholder="Case resolution summary" onChange={this.handleInputChange} value={state.resolution}/> <br />
+
+				<label htmlFor="status"> Case handler: </label>
+				<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />
+
+				{console.log(state.authorized, localStorage.getItem("token"))}
+				<label htmlFor="status"> Case creation date: </label>			
+				<input style={{display: (state.authorized && " inline") || " none"}} type="text" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} disabled={true}/> <br />
+
+				<label htmlFor="status"> Case description: </label>
+				<input className="extendedField" type="text" name="description" placeholder="Case description" onChange={this.handleInputChange} value={state.description}/> <br />
+
+				<label htmlFor="status"> Case resolution comment: </label>
+				<input className="extendedField" type="text" name="resolution" placeholder="Case resolution summary" onChange={this.handleInputChange} value={state.resolution}/> <br />
+
 				<input type="button" value="Create" onClick={this.signUp}/> <br />
 			</form>
-			<Link to="/">Main page</Link>
+			<Link to="/cases">Main page</Link>
 		</div>
 	}
 }
