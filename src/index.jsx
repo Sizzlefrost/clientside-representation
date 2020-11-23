@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 
 import "./css/styles.css";
 
-import { BrowserRouter, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 
 import { NavBarComponent } from './components/Main/Navbar';
 //import { FrontPageComponent } from './components/Main/Frontpage';
@@ -20,7 +20,8 @@ import { UserListComponent } from './components/User/List';
 //Bicycle Theft tracking app project: CRUD app - create/read/update/delete
 
 export class App extends Component {
-	
+	//TODO: MAKE RE-ROUTES UPDATE NAVBAR!!!!
+
 	//Ralliterated Render Routing Remarks
 	//first route that matches, goes through; therefore for home page we have to specify "exact" or it'll override other pages' routing
 	//update uses the :id argument, so we pass a function in props that extracts
@@ -32,7 +33,7 @@ export class App extends Component {
 
 		return (
 			<div>
-				<NavBarComponent />
+				<NavBarComponent/>
 				<Switch>
 					<Redirect exact from="/" to="/auth"/>
 					<Route path="/report" component={ CaseCreationComponent } />

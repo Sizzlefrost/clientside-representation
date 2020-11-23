@@ -23,6 +23,7 @@ export class UserAuthorizationComponent extends Component {
 		})
 		.then((response) => response.json())
 		.then((data) => {
+			if (!data.token) {alert('Invalid account!'); return};
 			localStorage.setItem("token", data.token); //save the received token to local storage
 			this.setState((prevState) => {this.state.redirect = true});
 		})

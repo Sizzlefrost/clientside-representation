@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import './Create.css';
+import '../../Common/Dropdown.css';
+const dateFormat = require ("dateFormat");
 
 export class CaseCreationComponent extends Component {
 	getCurrentDate = () => {
 		let cdate = new Date(); //to YYYY-MM-DD
-		const cyear = cdate.getFullYear().toString();
-		let cmonth = (cdate.getMonth()+1).toString();
-		if (cmonth < 10) { cmonth = "0".concat(cmonth) };
-		let cday = cdate.getDate().toString();
-		if (cday < 10) { cday = "0".concat(cday) };
-		return cdate, cyear.concat(".".concat(cmonth.concat(".".concat(cday))))
+		return dateFormat(cdate, "isoDate")
 	}
 
 	state = {
@@ -143,7 +139,7 @@ export class CaseCreationComponent extends Component {
 				<input type="text" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} disabled={true}/> <br />
 
 				<label htmlFor="licenseNumber"> Bike license number: </label>
-				<input type="number" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
+				<input type="string" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
 
 				<label htmlFor="status"> Bike colour: </label>
 				<input type="text" name="color" placeholder="Colour" onChange={this.handleInputChange} value={state.color}/> <br />

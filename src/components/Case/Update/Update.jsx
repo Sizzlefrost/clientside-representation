@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
+const dateFormat = require ("dateFormat");
+import '../../Common/Dropdown.css';
+import './Update.css';
 
 export class CaseUpdateComponent extends Component {
 	state = {
@@ -45,7 +48,7 @@ export class CaseUpdateComponent extends Component {
 					clientId: cases[CID].clientId,
 					description: cases[CID].description,
 					resolution: cases[CID].resolution,
-					SUID: users[CID]._id, //fetch the serverside user ID, to include in further requests
+					SCID: cases[CID]._id, //fetch the serverside case ID, to include in further requests
 			})
 		});
 	}
@@ -64,7 +67,7 @@ export class CaseUpdateComponent extends Component {
 				"ownerFullName": state.ownerFullName,
 				"officer": state.officer,
 				"createdAt": state.createdAt,
-				"updateAt": state.updateAt,
+				"updateAt": dateFormat(new Date, "isoDate"),
 				"clientId": state.clientId,
 				"description": state.description,
 				"resolution": state.resolution, }),
@@ -98,9 +101,35 @@ export class CaseUpdateComponent extends Component {
 		const value = event.target.value;
 		const name = event.target.name;
 
-		this.setState({ 
-			[name]: value	
+		this.setState((prevState) => { 
+			this.state.[name] = value;
+			this.forceUpdate();	
 		});
+	}
+
+	convertStatus(techStatus) {
+		if (techStatus === "new") {return "New"}
+		else {
+			if (techStatus === "in_progress") {return "In progress"}
+			else {return "Concluded"};
+		};
+	}
+
+	interpretValues(techValue) {
+		switch (techValue) {
+			case ("new"):
+				return "New";
+			case ("in_progress"):
+				return "In progress";
+			case ("done"):
+				return "Concluded";
+			case ("general"):
+				return "General";
+			case ("sport"):
+				return "Sport";
+			default:
+				return "Error";
+		}
 	}
 
 	render() {
@@ -121,18 +150,77 @@ export class CaseUpdateComponent extends Component {
 			description: '',					//optional
 			resolution: '',						//optional; mandatory for closed cases (status: done) */}
 
-		return <div>
-			<h2>Case file #{state.CID}</h2>
+		let date = dateFormat(state.date, "isoDate");
+		let crd = dateFormat(state.createdAt, "isoDate");
+		let upd = dateFormat(state.updateAt, "isoDate");
+
+		return <div className="updateBody">
+			<h2>Case file #{state.CID}</h2> <br />
 			
 			<label htmlFor="status">Status:</label>
-			{//status: use a dropdown menu
-			} <br />
+			<div className="dropdown">
+				<button className="dropbtn"> {this.convertStatus(state.status)} </button>
+				<form className={((state.status != "done") && "dropdown-content") || "dropdown-hidden"}>
+					<div className="dropdown-single">
+						<label htmlFor="new">New</label>
+						<input type="radio" name="status" id="new" value="new" onChange={this.handleInputChange} />
+					</div>
+					<div className="dropdown-single">
+						<label htmlFor="in_progress">In progress</label>
+						<input type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleInputChange} />
+					</div>
+					<div className="dropdown-single">
+						<label htmlFor="done">Concluded</label>
+						<input type="radio" name="status" id="done" value="done" onChange={this.handleInputChange} />
+					</div>
+				</form>
+			</div> <br />
 
 			<label htmlFor="date">Date of report:</label> 
-			<input type="date" name="date" value={state.date} disabled={true}/> <br />
+			<input type="date" name="date" value={date} disabled={true}/> <br />
+				
 
-			
-			
+			<label htmlFor="licenseNumber"> Bike license number: </label>
+			<input type="string" name="licenseNumber" placeholder="A12345" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
+
+			<label htmlFor="status"> Bike colour: </label>
+			<input type="text" name="color" placeholder="Blue" onChange={this.handleInputChange} value={state.color}/> <br />
+
+			<label htmlFor="type"> Bike type: </label>
+			<div className="dropdown">
+				<button className="dropbtn"> {this.interpretValues(state.type)} </button>
+				<form className="dropdown-content">
+					<div className="dropdown-single">
+						<label htmlFor="sport">{this.interpretValues("sport")}</label>
+						<input type="radio" name="type" id="sport" value="sport" onChange={this.handleInputChange}/>
+					</div>
+					<div className="dropdown-single">
+						<label htmlFor="general">{this.interpretValues("general")}</label>
+						<input type="radio" name="type" id="general" value="general" onChange={this.handleInputChange}/>
+					</div>
+				</form>
+			</div> <br />
+
+			<label htmlFor="ownerFullName"> Full name of bike user: </label>
+			<input type="text" name="ownerFullName" placeholder="Adam Barkley" onChange={this.handleInputChange} value={state.ownerFullName}/> <br />
+
+			<label htmlFor="officer"> Case handler: </label>
+			<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />
+
+			<label htmlFor="createdAt"> Case creation date: </label>			
+			<input style={{display: (!state.authFlag && " inline") || " none"}} type="date" name="createdAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={crd} disabled={true}/> <br />
+
+			<label htmlFor="updateAt"> Latest case update date: </label>			
+			<input style={{display: (!state.authFlag && " inline") || " none"}} type="date" name="updateAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={upd} disabled={true}/> <br />
+
+			<label htmlFor="description"> Case description: </label>
+			<textarea name="description" rows="4" cols="60" maxlength="300" placeholder="Describe the circumstances of the theft and any other useful information" wrap="soft" onChange={this.handleInputChange} value={state.description} /><br />
+
+			<label htmlFor="resolution"> Case resolution comment: </label>
+			<textarea name="resolution" rows="4" cols="60" maxlength="300" placeholder="When closing the case, provide a summary of undertaken actions and reasoning for closing the case" wrap="soft" onChange={this.handleInputChange} value={state.resolution} /> <br />
+
+			<input type="button" id="update" value="Update" onClick={this.updateSend}/> <br />
+
 			{link}
 		</div>
 	}

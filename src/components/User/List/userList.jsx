@@ -11,7 +11,6 @@ export class UserListComponent extends Component {
 
 	componentDidMount() {
 		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authFlag=true}); this.render();return}; //redirect to main
-		console.log(localStorage.getItem("token"));
 		fetch('http://84.201.129.203:8888/api/officers', {headers: {"Authorization": "Bearer ".concat(localStorage.getItem("token").toString())}})
 			.then(response => response.json())
 			.then(users => {
@@ -108,7 +107,6 @@ export class UserListComponent extends Component {
 		let link = (this.state.authFlag && <Redirect to="/auth"/>) || (<Link to="/createUser">Create a new user</Link>);
 		let self = this;
 		
-		console.log(this.state.authFlag, link.type.displayName || link.type);
 		return <div>
 			<table>
 				<tbody>

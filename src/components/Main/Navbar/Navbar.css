@@ -1,13 +1,36 @@
 .navbar {
-	background-color: black;
+	background-color: #112266;
 	color: white;
 	margin: 0;
-	padding-top: 25px;
-	padding-bottom: 25px;
-	padding-left: 10px;
-	min-width: 100vw;
+	min-width: 100vmax;
+	max-width: 600vmax;
 	min-height: 50px;
+	max-height: 70px;
 	display: flex;
 	justify-content: space-around;
 	flex-direction: right;
+	border-bottom: 3px solid #24f480;
+	align-items: center;
+}
+
+.navbar h1 {
+	font: 40px source sans pro,Arial,Helvetica,sans-serif;
+	margin: 0;
+}
+
+.navbar button {
+	background-color: #6677AA;
+	border-radius: 12px;
+	color: white;
+	padding: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	height: 4ex;
+}
+
+.navbar button:hover {
+	background-color: #556699;
 }

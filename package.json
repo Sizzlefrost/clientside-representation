@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Sizzlefrost/clientside-representation#readme",
   "dependencies": {
+    "dateformat": "^3.0.3",
     "json-server": "^0.16.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",

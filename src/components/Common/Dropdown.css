@@ -1,6 +1,18 @@
+body {
+  background-color: #BBCCFF;
+  font: 16px source sans pro,Arial,Helvetica,sans-serif;
+  min-width: 100vmax;
+  max-width: 100vmax;
+}
+
+.title {
+  color: #6677AA;
+  text-decoration: underline;
+}
+
 /* Style The Dropdown Button */
 .dropbtn {
-  background-color: #550000;
+  background-color: #6677AA;
   color: white;
   padding: 16px;
   font-size: 16px;
@@ -24,6 +36,10 @@
   z-index: 1;
 }
 
+.dropdown-hidden {
+  display: none;
+}
+
 /* Links inside the dropdown */
 .dropdown-content .dropdown-single {
   color: black;
@@ -44,7 +60,7 @@
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+  background-color: #556699;
 }
 
 /* Ensure that our ugly input fields are not displayed */

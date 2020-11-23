@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 import { Link, Redirect } from 'react-router-dom';
+const dateFormat = require ("dateFormat");
+import '../../Common/Dropdown.css';
+import './List.css';
 
 export class CaseListComponent extends Component {
 	state = {
@@ -57,12 +60,21 @@ export class CaseListComponent extends Component {
 		});
 	}
 
-	convertStatus(techStatus) {
-		if (techStatus === "new") {return "New"}
-		else {
-			if (techStatus === "in_progress") {return "In progress"}
-			else {return "Concluded"};
-		};
+	interpretValues(techValue) {
+		switch (techValue) {
+			case ("new"):
+				return "New";
+			case ("in_progress"):
+				return "In progress";
+			case ("done"):
+				return "Concluded";
+			case ("general"):
+				return "General";
+			case ("sport"):
+				return "Sport";
+			default:
+				return "Error";
+		}
 	}
 
 	formatTableRows(cases) {
@@ -88,8 +100,8 @@ export class CaseListComponent extends Component {
 			if (!cases[i]) {return};
 
 			let status = <div className="dropdown">
-					<button className="dropbtn"> {self.convertStatus(state.cases[i].status)} </button>
-					<form className="dropdown-content">
+					<button className="dropbtn"> {self.interpretValues(state.cases[i].status)} </button>
+					<form className={((state.cases[i].status != "done") && "dropdown-content") || "dropdown-hidden"}>
 						<div className="dropdown-single">
 							<label htmlFor={"new".concat(i.toString())}>New</label>
 							<input type="radio" name="status" id={"new".concat(i.toString())} value="new" onChange={self.handleRadioSelect} />
@@ -113,12 +125,12 @@ export class CaseListComponent extends Component {
 				<td>{status}</td>
 				<td>{cases[i].licenseNumber}</td>
 				<td>{cases[i].color}</td>
-				<td>{cases[i].type}</td>
+				<td>{this.interpretValues(cases[i].type)}</td>
 				<td>{cases[i].ownerFullName}</td>
 				<td>{cases[i].officer || "-"}</td>
-				<td>{cases[i].createdAt}</td>
-				<td>{cases[i].updateAt}</td>
-				<td>{link}</td>
+				<td>{dateFormat(cases[i].createdAt, "isoDate")}</td>
+				<td>{dateFormat(cases[i].updateAt, "isoDate")}</td>
+				<td><div className="link">{link}</div></td>
 				<td>{remove}</td>
 			</tr>;
 		}
@@ -154,15 +166,14 @@ export class CaseListComponent extends Component {
 		let table = this.formatTableRows(cases)
 
 		return <div>
-			<table>
+			<h1 className="title" style={{marginLeft: 5 + 'ex'}}>List of BikeSecure cases</h1>
+			<table className="caseList">
 				<tbody>
 					{table}
 				</tbody>
 			</table>
 			<br/><br/><br/>
-			{link} <br/>
-
-			<button onClick={function() {return self.signOut(self)}}>Sign out</button>
+			<div className="caseList">{link}</div> <br/>
 		</div>
 	}
 }
