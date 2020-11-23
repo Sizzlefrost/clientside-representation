@@ -131,7 +131,7 @@ export class CaseListComponent extends Component {
 				<td>{dateFormat(cases[i].createdAt, "isoDate")}</td>
 				<td>{dateFormat(cases[i].updateAt, "isoDate")}</td>
 				<td><div className="link">{link}</div></td>
-				<td>{remove}</td>
+				<td><div className="link">{remove}</div></td>
 			</tr>;
 		}
 

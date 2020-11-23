@@ -5,13 +5,15 @@
 }
 
 .updateBody textarea {
+	display: block;
 	vertical-align: top;
-	resize: none;
+	max-width: 400px;
 }
 
 .updateBody input#update {
 	display: block;
-	width: 10ex;
+	width: 160px;
+	height: 50px;
 	background-color: #6677AA;
 	color: white;
 	padding: 16px;
@@ -25,9 +27,17 @@
 	background-color: #556699;
 }
 
-.updateBody input {
+.updateBody input:not(.dropdown-input) {
 	display: block;
-	width: 20ex;
+	width: 152px;
+	height: 20px;
+	padding: 2px;
+}
+
+.updateBody button {
+	display: block;
+	width: 160px;
+	height: 50px;
 }
 
 .updateBody a {

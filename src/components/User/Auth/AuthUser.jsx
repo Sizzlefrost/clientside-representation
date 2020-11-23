@@ -10,6 +10,16 @@ export class UserAuthorizationComponent extends Component {
 		redirect: false,
 	}
 
+	componentDidMount() {	
+		if (localStorage.getItem("token")) {this.setState((prevState)=>{this.state.redirect=true; this.forceUpdate()})}; //check auth
+	}
+
+	chkEnter = (e) => {
+		const ENTER = 13;
+
+		if (e.keyCode == ENTER) {this.submit()};
+	}
+
 	submit = () => {
 		const state = this.state
 		fetch(`http://84.201.129.203:8888/api/auth/sign_in`, {
@@ -56,11 +66,11 @@ export class UserAuthorizationComponent extends Component {
 			return <div>
 				<h2>Sign in</h2>
 			
-				<input type="email" name="email" placeholder="e-mail" onChange={this.handleInputChange} value={state.email}/> <br />
+				<input type="email" name="email" placeholder="e-mail" onKeyDown={this.chkEnter} onChange={this.handleInputChange} value={state.email}/> <br />
 				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
-				<input type="password" id="password" name="password" placeholder="password" onChange={this.handleInputChange} value={state.password}/> <br />
+				<input type="password" id="password" name="password" placeholder="password" onKeyDown={this.chkEnter} onChange={this.handleInputChange} value={state.password}/> <br />
 				
-				<input type="button" value="Sign in" onClick={this.submit} disabled={!state.email.length || !state.password.length}/> <br />
+				<input type="submit" value="Sign in" onClick={this.submit} disabled={!state.email.length || !state.password.length}/> <br />
 
 				<span>Or <Link to="/createUser">sign up</Link></span>
 			</div>

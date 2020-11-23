@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import '../../Common/Dropdown.css';
 const dateFormat = require ("dateFormat");
+import './Create.css';
 
 export class CaseCreationComponent extends Component {
 	getCurrentDate = () => {
@@ -25,10 +26,11 @@ export class CaseCreationComponent extends Component {
 		resolution: '',						//optional; mandatory for closed cases (status: done)
 
 		authorized: true,
+		init: false,
 	}
 
 	componentDidMount() {
-		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authorized=false})}; //check auth
+		if (!localStorage.getItem("token")) {this.setState((prevState)=>{this.state.authorized=false; this.forceUpdate()})}; //check auth
 	}
 
 	handleInputChange = (event) => {
@@ -113,70 +115,72 @@ export class CaseCreationComponent extends Component {
 	render() {
 		const state = this.state;
 
-		return <div>
-			<h2>Create a new case</h2>
-			<form>
-				<label htmlFor="status"> Case status: </label>
-				<div className="dropdown">
-					<button className="dropbtn">{this.interpretValues(state.status)}</button>
-					<form className="dropdown-content">
+		let redirect = (state.authorized && <Redirect to="/createCase" /> || <span style={{display: "none"}}> </span>);
+		console.log(redirect);
+
+		if (!state.init) {state.init = true; return null};
+
+		return <div className="createBody">
+			{redirect}
+			<h2 className={state.authorized ? "hide" : undefined}>Report a theft</h2>
+			<h2 className={!state.authorized ? "hide" : undefined}>Create a new case</h2>
+			<label htmlFor="status" className={!state.authorized ? "hide" : undefined}> Case status: </label>
+			<div className={!state.authorized ? "hide" : "dropdown"}>
+				<button className="dropbtn">{this.interpretValues(state.status)}</button>
+				<form className="dropdown-content">
+				<div className="dropdown-single">
+					<label htmlFor="new">{this.interpretValues("new")}</label>
+					<input className="dropdown-input" type="radio" name="status" id="new" value="new" onChange={this.handleRadioSelect}/>
+				</div>
+				<div className="dropdown-single">
+					<label htmlFor="in_progress">{this.interpretValues("in_progress")}</label>
+					<input className="dropdown-input" type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleRadioSelect}/>
+				</div>
+				<div className="dropdown-single">
+					<label htmlFor="done">{this.interpretValues("done")}</label>
+					<input className="dropdown-input" type="radio" name="status" id="done" value="done" onChange={this.handleRadioSelect}/>
+				</div>
+				</form>
+			</div> <br className={!state.authorized ? "hide" : undefined}/>
+
+			<label htmlFor="date"> Date of report: </label>
+			<input type="date" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} readOnly={true}/> <br />
+
+			<label htmlFor="licenseNumber"> Bike license number: </label>
+			<input type="string" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
+
+			<label htmlFor="status"> Bike colour: </label>
+			<input type="text" name="color" placeholder="Colour" onChange={this.handleInputChange} value={state.color}/> <br />
+
+			<label htmlFor="type"> Bike type: </label>
+			<div className="dropdown">
+				<button className="dropbtn"> {this.interpretValues(state.type)} </button>
+				<form className="dropdown-content">
 					<div className="dropdown-single">
-						<label htmlFor="new">{this.interpretValues("new")}</label>
-						<input type="radio" name="status" id="new" value="new" onChange={this.handleRadioSelect}/>
+						<label htmlFor="sport">{this.interpretValues("sport")}</label>
+						<input className="dropdown-input" type="radio" name="type" id="sport" value="sport" onChange={this.handleRadioSelect}/>
 					</div>
 					<div className="dropdown-single">
-						<label htmlFor="in_progress">{this.interpretValues("in_progress")}</label>
-						<input type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleRadioSelect}/>
+						<label htmlFor="general">{this.interpretValues("general")}</label>
+						<input className="dropdown-input" type="radio" name="type" id="general" value="general" onChange={this.handleRadioSelect}/>
 					</div>
-					<div className="dropdown-single">
-						<label htmlFor="done">{this.interpretValues("done")}</label>
-						<input type="radio" name="status" id="done" value="done" onChange={this.handleRadioSelect}/>
-					</div>
-					</form>
-				</div> <br />
+				</form>
+			</div> <br />
 
-				<label htmlFor="date"> Date of report: </label>
-				<input type="text" name="date" placeholder="Date of report" onChange={this.handleInputChange} value={state.date} disabled={true}/> <br />
+			<label htmlFor="ownerFullName"> Full name of bike user: </label>
+			<input type="text" name="ownerFullName" placeholder="Full name of bike owner" onChange={this.handleInputChange} value={state.ownerFullName}/> <br />
 
-				<label htmlFor="licenseNumber"> Bike license number: </label>
-				<input type="string" name="licenseNumber" placeholder="License number" onChange={this.handleInputChange} value={state.licenseNumber}/> <br />
+			<label htmlFor="officer" className={!state.authorized ? "hide" : undefined}> Case handler: </label>
+			<input className={!state.authorized ? "hide" : undefined} type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br className={!state.authorized ? "hide" : undefined}/>
 
-				<label htmlFor="status"> Bike colour: </label>
-				<input type="text" name="color" placeholder="Colour" onChange={this.handleInputChange} value={state.color}/> <br />
+			{console.log(state.authorized, localStorage.getItem("token"))}
+			<label className={!state.authorized ? "hide" : undefined} htmlFor="createdAt"> Case creation date: </label>		
+			<input className={!state.authorized ? "hide" : undefined} type="date" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} readOnly={true}/> <br className={!state.authorized ? "hide" : undefined}/>
 
-				<label htmlFor="type"> Bike type: </label>
-				<div className="dropdown">
-					<button className="dropbtn"> {this.interpretValues(state.type)} </button>
-					<form className="dropdown-content">
-						<div className="dropdown-single">
-							<label htmlFor="sport">{this.interpretValues("sport")}</label>
-							<input type="radio" name="type" id="sport" value="sport" onChange={this.handleRadioSelect}/>
-						</div>
-						<div className="dropdown-single">
-							<label htmlFor="general">{this.interpretValues("general")}</label>
-							<input type="radio" name="type" id="general" value="general" onChange={this.handleRadioSelect}/>
-						</div>
-					</form>
-				</div> <br />
+			<label htmlFor="description"> Case description: </label>
+			<textarea name="description" rows="5" cols="60" maxLength="480" placeholder="Describe the circumstances of the theft and any other useful information" wrap="soft" onChange={this.handleInputChange} value={state.description}/> <br />
 
-				<label htmlFor="status"> Full name of bike user: </label>
-				<input type="text" name="ownerFullName" placeholder="Full name of bike owner" onChange={this.handleInputChange} value={state.ownerFullName}/> <br />
-
-				<label htmlFor="status"> Case handler: </label>
-				<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />
-
-				{console.log(state.authorized, localStorage.getItem("token"))}
-				<label htmlFor="status"> Case creation date: </label>			
-				<input style={{display: (state.authorized && " inline") || " none"}} type="text" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} disabled={true}/> <br />
-
-				<label htmlFor="status"> Case description: </label>
-				<input className="extendedField" type="text" name="description" placeholder="Case description" onChange={this.handleInputChange} value={state.description}/> <br />
-
-				<label htmlFor="status"> Case resolution comment: </label>
-				<input className="extendedField" type="text" name="resolution" placeholder="Case resolution summary" onChange={this.handleInputChange} value={state.resolution}/> <br />
-
-				<input type="button" value="Create" onClick={this.signUp}/> <br />
-			</form>
+			<input type="button" id="create" value="Create" onClick={this.signUp}/> <br />
 			<Link to="/cases">Main page</Link>
 		</div>
 	}

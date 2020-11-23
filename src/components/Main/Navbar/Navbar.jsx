@@ -49,7 +49,7 @@ export class NavBarComponent extends Component {
 
 		console.log(`Auth status: ${this.state.authorized}`);
 
-		let auth = (this.state.authorized && <button onClick={function() {return self.signOut(self)}}>Sign out</button>) || <Redirect to="/auth" />;
+		let auth = (this.state.authorized && <button onClick={function() {return self.signOut(self)}}>Sign out</button>) || <span style={{display: "none"}}> </span>;
 
 		//harmless template: <span style={{display: "none"}}> </span>
 		//redirect template: <Redirect to="/auth" />

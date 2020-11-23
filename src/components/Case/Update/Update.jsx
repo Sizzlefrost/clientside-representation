@@ -155,7 +155,7 @@ export class CaseUpdateComponent extends Component {
 		let upd = dateFormat(state.updateAt, "isoDate");
 
 		return <div className="updateBody">
-			<h2>Case file #{state.CID}</h2> <br />
+			<h2>Case file #{state.CID}</h2>
 			
 			<label htmlFor="status">Status:</label>
 			<div className="dropdown">
@@ -163,21 +163,21 @@ export class CaseUpdateComponent extends Component {
 				<form className={((state.status != "done") && "dropdown-content") || "dropdown-hidden"}>
 					<div className="dropdown-single">
 						<label htmlFor="new">New</label>
-						<input type="radio" name="status" id="new" value="new" onChange={this.handleInputChange} />
+						<input className="dropdown-input" type="radio" name="status" id="new" value="new" onChange={this.handleInputChange} />
 					</div>
 					<div className="dropdown-single">
 						<label htmlFor="in_progress">In progress</label>
-						<input type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleInputChange} />
+						<input className="dropdown-input" type="radio" name="status" id="in_progress" value="in_progress" onChange={this.handleInputChange} />
 					</div>
 					<div className="dropdown-single">
 						<label htmlFor="done">Concluded</label>
-						<input type="radio" name="status" id="done" value="done" onChange={this.handleInputChange} />
+						<input className="dropdown-input" type="radio" name="status" id="done" value="done" onChange={this.handleInputChange} />
 					</div>
 				</form>
 			</div> <br />
 
 			<label htmlFor="date">Date of report:</label> 
-			<input type="date" name="date" value={date} disabled={true}/> <br />
+			<input type="date" name="date" value={date} readOnly={true}/> <br />
 				
 
 			<label htmlFor="licenseNumber"> Bike license number: </label>
@@ -192,11 +192,11 @@ export class CaseUpdateComponent extends Component {
 				<form className="dropdown-content">
 					<div className="dropdown-single">
 						<label htmlFor="sport">{this.interpretValues("sport")}</label>
-						<input type="radio" name="type" id="sport" value="sport" onChange={this.handleInputChange}/>
+						<input className="dropdown-input" type="radio" name="type" id="sport" value="sport" onChange={this.handleInputChange}/>
 					</div>
 					<div className="dropdown-single">
 						<label htmlFor="general">{this.interpretValues("general")}</label>
-						<input type="radio" name="type" id="general" value="general" onChange={this.handleInputChange}/>
+						<input className="dropdown-input" type="radio" name="type" id="general" value="general" onChange={this.handleInputChange}/>
 					</div>
 				</form>
 			</div> <br />
@@ -208,16 +208,16 @@ export class CaseUpdateComponent extends Component {
 			<input type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br />
 
 			<label htmlFor="createdAt"> Case creation date: </label>			
-			<input style={{display: (!state.authFlag && " inline") || " none"}} type="date" name="createdAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={crd} disabled={true}/> <br />
+			<input type="date" name="createdAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={crd} readOnly={true}/> <br />
 
 			<label htmlFor="updateAt"> Latest case update date: </label>			
-			<input style={{display: (!state.authFlag && " inline") || " none"}} type="date" name="updateAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={upd} disabled={true}/> <br />
+			<input type="date" name="updateAt" placeholder="01.01.1970" onChange={this.handleInputChange} value={upd} readOnly={true}/> <br />
 
 			<label htmlFor="description"> Case description: </label>
-			<textarea name="description" rows="4" cols="60" maxlength="300" placeholder="Describe the circumstances of the theft and any other useful information" wrap="soft" onChange={this.handleInputChange} value={state.description} /><br />
+			<textarea name="description" rows="5" cols="60" maxLength="480" placeholder="Describe the circumstances of the theft and any other useful information" wrap="soft" onChange={this.handleInputChange} value={state.description} /><br />
 
 			<label htmlFor="resolution"> Case resolution comment: </label>
-			<textarea name="resolution" rows="4" cols="60" maxlength="300" placeholder="When closing the case, provide a summary of undertaken actions and reasoning for closing the case" wrap="soft" onChange={this.handleInputChange} value={state.resolution} /> <br />
+			<textarea name="resolution" rows="5" cols="60" maxLength="480" placeholder="When closing the case, provide a summary of undertaken actions and reasoning for closing the case" wrap="soft" onChange={this.handleInputChange} value={state.resolution} /> <br />
 
 			<input type="button" id="update" value="Update" onClick={this.updateSend}/> <br />
 

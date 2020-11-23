@@ -36,6 +36,11 @@ body {
   z-index: 1;
 }
 
+.dropmenu-hidden .dropbtn {
+  background-color: #888888;
+  cursor: default;
+}
+
 .dropdown-hidden {
   display: none;
 }
@@ -54,7 +59,7 @@ body {
 }
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
+.dropdown:hover:not(.dropmenu-hidden) .dropdown-content {
   display: block;
 }
 
@@ -64,6 +69,6 @@ body {
 }
 
 /* Ensure that our ugly input fields are not displayed */
-.dropdown input {
+.dropdown-single input {
   display: none;
 }
