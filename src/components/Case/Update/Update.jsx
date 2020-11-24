@@ -220,6 +220,7 @@ export class CaseUpdateComponent extends Component {
 			<textarea name="resolution" rows="5" cols="60" maxLength="480" placeholder="When closing the case, provide a summary of undertaken actions and reasoning for closing the case" wrap="soft" onChange={this.handleInputChange} value={state.resolution} /> <br />
 
 			<input type="button" id="update" value="Update" onClick={this.updateSend}/> <br />
+			<input type="button" id="update" value="Delete" onClick={this.deleteSend}/> <br />
 
 			{link}
 		</div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import { Link, Route, Redirect, Switch } from 'react-router-dom';
+import { Link, Route, Redirect, Switch } from 'react-router-dom'
+import './auth.css';
 
 export class UserAuthorizationComponent extends Component {
 	state = {

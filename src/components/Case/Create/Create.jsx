@@ -116,9 +116,9 @@ export class CaseCreationComponent extends Component {
 		const state = this.state;
 
 		let redirect = (state.authorized && <Redirect to="/createCase" /> || <span style={{display: "none"}}> </span>);
-		console.log(redirect);
+		console.log(`init status ${state.init}`);
 
-		if (!state.init) {state.init = true; return null};
+		if (!state.init) {state.init = true; setTimeout(this.forceUpdate(), 2000); return null};
 
 		return <div className="createBody">
 			{redirect}
@@ -173,7 +173,7 @@ export class CaseCreationComponent extends Component {
 			<label htmlFor="officer" className={!state.authorized ? "hide" : undefined}> Case handler: </label>
 			<input className={!state.authorized ? "hide" : undefined} type="text" name="officer" placeholder="ID of case handler" onChange={this.handleInputChange} value={state.officer}/> <br className={!state.authorized ? "hide" : undefined}/>
 
-			{console.log(state.authorized, localStorage.getItem("token"))}
+			{console.log(`token status: ${state.authorized}, token ${localStorage.getItem("token")}`)}
 			<label className={!state.authorized ? "hide" : undefined} htmlFor="createdAt"> Case creation date: </label>		
 			<input className={!state.authorized ? "hide" : undefined} type="date" name="createdAt" placeholder="Date of case creation" onChange={this.handleInputChange} value={state.createdAt} readOnly={true}/> <br className={!state.authorized ? "hide" : undefined}/>
 

@@ -1,0 +1,119 @@
+.userList {
+	border-collapse: collapse;
+	text-align: center;
+	margin-left: 10ex;
+	margin-right: 10ex;
+}
+
+.userList th {
+	border-width: 2px;
+	border-color: #334477;
+	border-style: solid;
+	padding: 0;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #445588;
+	color: #FFFFFF;
+}
+
+.userList td {
+	border-width: 3px;
+	border-color: #334477;
+	border-style: solid;
+	background-color: #BBCCFF;
+	padding: 0;
+	width: 10%;
+}
+
+.userList td a {
+	display: block;
+	left: 0;
+	right: 0;
+}
+
+.userList td div {
+	top: 0;
+	bottom: 0;
+}
+
+.userList .dropdown {
+	width: auto;
+	display: block;
+	left: 0px;
+	right: 0px;
+}
+
+.userList .dropdown button {
+	margin: 0;
+	width: 100%;
+}
+
+.userList td input {
+	display: block;
+	background-color: #6677AA;
+	color: white;
+	max-width: 40ex;
+	padding: 16px 20px 16px 20px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	border-radius: 0;
+}
+
+.userList td input:hover {
+	background-color: #556699;
+}
+
+h1 {
+	margin-left: 5ex;
+}
+
+.userList ~ a {
+	margin-left: 10ex;
+	display: block;
+	max-width: 30ex;
+	background-color: #6677AA;
+	align-content: left;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: center
+}
+
+.userList a {
+	display: block;
+	max-width: 50ex;
+	background-color: #6677AA;
+	align-content: left;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: center
+}
+
+.userList a:hover {
+	background-color: #556699;
+}
+
+.userList ~ a:hover {
+	background-color: #556699;
+}
+
+.userList button {
+	display: inline-block;
+	background-color: #6677AA;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+}

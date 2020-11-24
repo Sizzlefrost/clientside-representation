@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
+import './update.css';
 
 export class UserUpdateComponent extends Component {
 	state = {
@@ -93,29 +94,21 @@ export class UserUpdateComponent extends Component {
 				this.state.approved = checked;
 			});
 		};
-
-		if (name == "passwordToggle") {
-			const pwdfield = document.getElementById("password")
-			if (checked == true) { pwdfield.type = "text" } else { pwdfield.type = "password" };
-		};
 	}
 
 	render() {
 		const state = this.state;
 
-		return <div>
+		return <div className="updateBody">
 			<h2>Collaborator page: {state.firstName} {state.lastName}</h2>
 			
 				<label htmlFor="firstName">First name:</label> <input type="text" name="firstName" placeholder="Alex" onChange={this.handleInputChange} value={state.firstName}/> <br />
 				<label htmlFor="lastName">Last name:</label> <input type="text" name="lastName" placeholder="Bloodwell" onChange={this.handleInputChange} value={state.lastName}/> <br />
 				<label htmlFor="email">E-mail:</label> <input type="email" name="email" placeholder="ab@c.net" onChange={this.handleInputChange} value={state.email}/> <br />
-				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
-				<label htmlFor="password">Hashed password:</label> <input type="password" id="password" name="password" placeholder="supersecret123" disabled={true} onChange={this.handleInputChange} value={state.password}/> <br />
-				<label htmlFor="clientId">Internal client ID:</label> <input type="text" name="clientId" placeholder="9001fake" disabled={true} value={state.clientId}/> <br />
-				<label htmlFor="serverId">Internal serverside UID:</label> <input type="text" name="serverId" placeholder="9001fake" disabled={true} value={state.SUID}/> <br />
+				<label htmlFor="serverId">Internal UID:</label> <input type="text" name="serverId" placeholder="9001fake" readOnly={true} value={state.SUID}/> <br />
 				<label htmlFor="approved">Approved:</label> <input type="checkbox" id="approved" name="approved" value={state.approved} onChange={this.toggleCheckbox}/> <br />
-				<input type="button" value="Update" onClick={this.updateSend} disabled={!state.email.length}/> <br />
-				<input type="button" value="Delete" onClick={this.deleteSend}/> <br />
+				<input type="button" id="update" value="Update" onClick={this.updateSend} disabled={!state.email.length}/> <br />
+				<input type="button" id="update" value="Delete" onClick={this.deleteSend}/> <br />
 			
 			<Link to="/collaborators">Main page</Link>
 		</div>

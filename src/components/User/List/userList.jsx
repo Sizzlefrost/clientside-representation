@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Link, Redirect } from 'react-router-dom';
+import './List.css';
 
 export class UserListComponent extends Component {
 	state = {
@@ -55,8 +56,8 @@ export class UserListComponent extends Component {
 				<td>{users[i].lastName}</td>
 				<td>{users[i].email}</td>
 				<td>{link}</td>
-				<td>{approved}</td>
-				<td>{remove}</td>
+				<td><div>{approved}</div></td>
+				<td><div>{remove}</div></td>
 			</tr>;
 		}
 
@@ -108,7 +109,8 @@ export class UserListComponent extends Component {
 		let self = this;
 		
 		return <div>
-			<table>
+			<h1>List of BikeSecure Collaborators</h1>
+			<table className="userList">
 				<tbody>
 					{this.formatTableRows(users)}
 				</tbody>

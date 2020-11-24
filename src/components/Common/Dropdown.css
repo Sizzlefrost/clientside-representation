@@ -36,11 +36,6 @@ body {
   z-index: 1;
 }
 
-.dropmenu-hidden .dropbtn {
-  background-color: #888888;
-  cursor: default;
-}
-
 .dropdown-hidden {
   display: none;
 }

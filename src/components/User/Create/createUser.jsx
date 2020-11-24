@@ -67,16 +67,19 @@ export class UserCreationComponent extends Component {
 	render() {
 		const state = this.state;
 
-		return <div className='createUserForm'>
+		return <div className='createBody'>
 			<h1>Create a new collaborator account</h1>
 			<form>
 				<input type="text" name="firstName" placeholder="First name" onChange={this.handleInputChange} value={state.firstName}/> <br />
 				<input type="text" name="lastName" placeholder="Last name" onChange={this.handleInputChange} value={state.lastName}/> <br />
 				<input type="email" name="email" placeholder="E-mail" onChange={this.handleInputChange} value={state.email}/> <br />
-				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.handlePasswordToggle} value={true}/> <br />
+				<label htmlFor="passwordToggle">Password visibility:</label>
+				<input type="checkbox" id="checkbox" name="passwordToggle" onChange={this.handlePasswordToggle}/>
+				<div />
+				<br /> 
 				<input type="password" name="password" id="password" placeholder="Password" onChange={this.handleInputChange} value={state.password}/> <br />
 				<input type="password" name="password2" id="password2" placeholder="Password again" onChange={this.handleInputChange} value={state.password2}/> <br />
-				<input type="button" value="Create" onClick={this.signUp} disabled={!state.email.length}/> <br />
+				<input type="button" id="create" value="Create" onClick={this.signUp} disabled={!state.email.length}/> <br />
 			</form>
 			<Link to="/collaborators">Main page</Link>
 		</div>
