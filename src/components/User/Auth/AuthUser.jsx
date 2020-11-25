@@ -16,7 +16,7 @@ export class UserAuthorizationComponent extends Component {
 	}
 
 	chkEnter = (e) => {
-		const ENTER = 13;
+		const ENTER = 13; //keycode
 
 		if (e.keyCode == ENTER) {this.submit()};
 	}

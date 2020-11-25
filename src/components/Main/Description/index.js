@@ -1,1 +1,1 @@
-export { JSComponentID } from "./Frontpage.jsx";
+export { FrontPageComponent } from "./Frontpage.jsx";
