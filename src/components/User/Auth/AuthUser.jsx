@@ -64,14 +64,14 @@ export class UserAuthorizationComponent extends Component {
 		const state = this.state;
 
 		if (state.redirect === false) {
-			return <div>
+			return <div className="authBody">
 				<h2>Sign in</h2>
 			
 				<input type="email" name="email" placeholder="e-mail" onKeyDown={this.chkEnter} onChange={this.handleInputChange} value={state.email}/> <br />
-				<label htmlFor="passwordToggle">Password visibility:</label> <input type="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> <br />
+				<div> <label htmlFor="passwordToggle" id="checkbox">Password visibility:</label> <input type="checkbox" id="checkbox" name="passwordToggle" onChange={this.toggleCheckbox} value={true}/> </div> <br /> <br />
 				<input type="password" id="password" name="password" placeholder="password" onKeyDown={this.chkEnter} onChange={this.handleInputChange} value={state.password}/> <br />
 				
-				<input type="submit" value="Sign in" onClick={this.submit} disabled={!state.email.length || !state.password.length}/> <br />
+				<input type="submit" id="auth" value="Sign in" onClick={this.submit} disabled={!state.email.length || !state.password.length}/>
 
 				<span>Or <Link to="/createUser">sign up</Link></span>
 			</div>

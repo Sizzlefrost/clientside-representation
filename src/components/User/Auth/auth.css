@@ -1,0 +1,62 @@
+.authBody {
+	margin-left: 10ex;
+	display: flex;
+	flex-direction: column;
+}
+
+.authBody textarea {
+	display: block;
+	vertical-align: top;
+	max-width: 400px;
+}
+
+.authBody input#auth {
+	display: block;
+	width: 160px;
+	height: 50px;
+	background-color: #6677AA;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	margin-bottom: 2px;
+}
+
+.authBody input#auth:hover {
+	background-color: #556699;
+}
+
+.authBody input:not(.dropdown-input) {
+	display: block;
+	width: 152px;
+	height: 20px;
+	padding: 2px;
+}
+
+.authBody button {
+	display: block;
+	width: 160px;
+	height: 50px;
+}
+
+.authBody a {
+	display: inline;
+	width: 10ex;
+	text-align: center;
+}
+
+.authBody #checkbox {
+	position: absolute;
+	display: inline;
+	width: auto;
+	min-width: 20px;
+	min-height: 20px;
+	vertical-align: sub;
+}
+
+.authBody input#checkbox {
+	left: 32ex;
+
+	margin-top: 0;
+}
