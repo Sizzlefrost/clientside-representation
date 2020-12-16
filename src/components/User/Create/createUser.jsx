@@ -61,6 +61,15 @@ export class UserCreationComponent extends Component {
 					'Content-type': 'application/json',
 				}
 			})
+			.then(response => {
+	            if (!response.ok) {
+	                alert("Sign-up failed with HTTP code " + response.status);
+	            }
+	            else {
+	            	alert("User creation successful!")
+	            }
+	            return response;
+	        })
 		};
 	}
 

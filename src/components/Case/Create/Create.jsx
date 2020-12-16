@@ -68,8 +68,14 @@ export class CaseCreationComponent extends Component {
 		}
 	}
 
-	signUp = () => {
+	createCase = () => {
 		const state = this.state;
+		const result;
+
+		if (!state.ownerFullName) {
+			alert("Case creation failed, you must supply the full name of the bike's owner!")
+			return
+		};
 
 		if (state.authorized === true) { //used on the authorized case creation page
 			fetch('http://84.201.129.203:8888/api/cases', { //post a new case
@@ -90,7 +96,8 @@ export class CaseCreationComponent extends Component {
 					'Authorization': 'Bearer '.concat(localStorage.getItem("token").toString()),
 					'Content-type': 'application/json',
 				}
-			});
+			})
+			.then(response => { result = response });
 		} else { //used on the unauthorized report creation page		
 			fetch('http://84.201.129.203:8888/api/public/report', { //post a new case
 				method: 'POST',
@@ -108,8 +115,18 @@ export class CaseCreationComponent extends Component {
 				headers: {
 					'Content-type': 'application/json',
 				}
-			});
-		}		
+			})
+			.then(response => { result = response });
+		};
+
+		if (!result.ok) {
+            alert("Case creation failed with HTTP code " + result.status);
+        }
+        else {
+        	alert("Case creation successful!")
+        };
+
+        return
 	}
 
 	render() {
@@ -178,7 +195,7 @@ export class CaseCreationComponent extends Component {
 			<label htmlFor="description"> Case description: </label>
 			<textarea name="description" rows="5" cols="60" maxLength="480" placeholder="Describe the circumstances of the theft and any other useful information" wrap="soft" onChange={this.handleInputChange} value={state.description}/> <br />
 
-			<input type="button" id="create" value="Create" onClick={this.signUp}/> <br />
+			<input type="button" id="create" value="Create" onClick={this.createCase}/> <br />
 			<Link to="/cases">Main page</Link>
 		</div>
 	}

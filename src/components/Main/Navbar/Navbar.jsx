@@ -53,6 +53,7 @@ export class NavBarComponent extends Component {
 			switch(props.currentPage) {
 			    case '/':
 			    case '/report':
+			    case '/createUser':
 			    case '/auth': //this one's particularly important, obviously
 				    throwToAuth = false;
 				    console.info(`%cIt shouldn't`,"color: green");
