@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
 import '../../Common/Dropdown.css';
-const dateFormat = require ("dateFormat");
+const dateFormat = require ("dateformat");
 import './Create.css';
 
 export class CaseCreationComponent extends Component {
@@ -70,7 +70,7 @@ export class CaseCreationComponent extends Component {
 
 	createCase = () => {
 		const state = this.state;
-		const result;
+		let result;
 
 		if (!state.ownerFullName) {
 			alert("Case creation failed, you must supply the full name of the bike's owner!")
@@ -97,7 +97,7 @@ export class CaseCreationComponent extends Component {
 					'Content-type': 'application/json',
 				}
 			})
-			.then(response => { result = response });
+			.then(response => { announceCreation(response) });
 		} else { //used on the unauthorized report creation page		
 			fetch('http://84.201.129.203:8888/api/public/report', { //post a new case
 				method: 'POST',
@@ -116,17 +116,19 @@ export class CaseCreationComponent extends Component {
 					'Content-type': 'application/json',
 				}
 			})
-			.then(response => { result = response });
+			.then(response => { announceCreation(response) });
 		};
 
+        return
+	}
+
+	announceCreation = (result) => {
 		if (!result.ok) {
             alert("Case creation failed with HTTP code " + result.status);
         }
         else {
         	alert("Case creation successful!")
         };
-
-        return
 	}
 
 	render() {
